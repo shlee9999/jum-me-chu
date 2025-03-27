@@ -1,18 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { menuOptions } from './constants/matzib-list';
 import { Wheel } from 'react-custom-roulette';
 
 function App() {
+  const [currentMenuOptions, setCurrentMenuOptions] = useState<
+    {
+      option: string;
+    }[]
+  >(() =>
+    JSON.parse(
+      localStorage.getItem('menuOptions') || JSON.stringify(menuOptions)
+    )
+  );
+  const [inputValue, setInputValue] = useState('');
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
 
   const handleSpinClick = () => {
     if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * menuOptions.length);
+      const newPrizeNumber = Math.floor(
+        Math.random() * currentMenuOptions.length
+      );
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
     }
   };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(inputValue);
+    setCurrentMenuOptions((prev) => [...prev, { option: inputValue }]);
+    setInputValue('');
+  };
+
+  useEffect(() => {
+    localStorage.setItem('menuOptions', JSON.stringify(currentMenuOptions));
+  }, [currentMenuOptions]);
 
   return (
     <div
@@ -31,7 +57,7 @@ function App() {
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
-        data={menuOptions}
+        data={currentMenuOptions}
         backgroundColors={[
           '#3f297e',
           '#175fa9',
@@ -57,8 +83,10 @@ function App() {
         textDistance={60}
         onStopSpinning={() => {
           setMustSpin(false);
-          alert(`오늘 점심은 ${menuOptions[prizeNumber].option}!`);
+          alert(`오늘 점심은 ${currentMenuOptions[prizeNumber].option}!`);
         }}
+        disableInitialAnimation
+        spinDuration={0.5}
       />
       <button
         onClick={handleSpinClick}
@@ -77,6 +105,9 @@ function App() {
       >
         SPIN
       </button>
+      <form onSubmit={onSubmit}>
+        <input type='text' onChange={onChange} value={inputValue} />
+      </form>
     </div>
   );
 }
