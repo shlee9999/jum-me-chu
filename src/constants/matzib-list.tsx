@@ -1,17 +1,23 @@
-export const MatZibList = [
-  { option: '부대찌개', style: { backgroundColor: '#3f297e' } },
-  { option: '유타로 - 라멘 ', style: { backgroundColor: '#175fa9' } },
-  { option: '돈카츠', style: { backgroundColor: '#169ed8' } },
-  { option: '하나우동(철판볶음밥)', style: { backgroundColor: '#239b63' } },
-  { option: '밥심', style: { backgroundColor: '#64b031' } },
-  { option: '들름집', style: { backgroundColor: '#efe61f' } },
-  { option: '맥날', style: { backgroundColor: '#f7a416' } },
-  { option: 'KFC', style: { backgroundColor: '#e6471d' } },
-  { option: '칸나칼국수', style: { backgroundColor: '#dc0936' } },
-  { option: '쭈꾸미', style: { backgroundColor: '#e5177b' } },
-  { option: '백반', style: { backgroundColor: '#be1180' } },
-  { option: '혜정식당 - 김찌', style: { backgroundColor: '#871f7f' } },
-  // { option: '옛터 - 백반', style: { backgroundColor: '' } },
-  // { option: '꾸아 - 쌀국수', style: { backgroundColor: '' } },
-  // { option: '중국집 -', style: { backgroundColor: '' } },
+// 메뉴 목록
+const menuList = [
+  '부대찌개',
+  '유타로',
+  '돈카츠',
+  '하나우동',
+  '밥심',
+  '들름집',
+  '맥날',
+  '칸나칼국수',
+  '쭈꾸미',
+  'KFC',
+  '백반',
+  '혜정식당',
+  '옛터',
+  '꾸아',
+  '중국집',
 ];
+
+// 메뉴 객체 배열 생성
+export const menuOptions = menuList.map((option) => ({
+  option,
+}));
