@@ -4,6 +4,7 @@ import { Menu } from './components/Menu';
 import { cn } from './utils/cn';
 import { Roulette } from './components/Roulette';
 import { useMenuStore } from './store/menuStore';
+import { AddForm } from './components/AddForm';
 
 function App() {
   const {
@@ -11,23 +12,10 @@ function App() {
     inactiveMenus,
     setActiveMenus,
     setInactiveMenus,
-    addActiveMenu,
+    // addActiveMenu,
   } = useMenuStore();
 
-  const [inputValue, setInputValue] = useState('');
   const [enabled, setEnabled] = useState(false);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (inputValue.trim()) {
-      addActiveMenu({ option: inputValue });
-      setInputValue('');
-    }
-  };
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -101,25 +89,9 @@ function App() {
       <h1 className='font-sans text-gray-800 text-3xl font-bold mb-6'>
         점심 메뉴 룰렛 🎯
       </h1>
-      <Roulette />
 
-      <form onSubmit={onSubmit} className='mt-5 flex gap-2.5'>
-        <input
-          type='text'
-          onChange={onChange}
-          value={inputValue}
-          placeholder='새 메뉴 입력'
-          className='p-2 rounded-md border border-gray-300'
-        />
-        <button
-          className={cn(
-            'px-4 py-2 bg-blue-600 text-white border-none rounded-md cursor-pointer',
-            'hover:bg-blue-700 transition-colors'
-          )}
-        >
-          추가
-        </button>
-      </form>
+      <Roulette />
+      <AddForm />
 
       <div className='flex w-full justify-center gap-10 mt-6'>
         <DragDropContext onDragEnd={onDragEnd}>
