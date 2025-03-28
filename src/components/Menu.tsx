@@ -4,7 +4,7 @@ import {
   DroppableProvided,
 } from 'react-beautiful-dnd';
 import { TMenu } from '../types/menu';
-import { CSSProperties } from 'react';
+import { cn } from '../utils/cn';
 
 interface MenuItemProps {
   provided: DraggableProvided;
@@ -18,14 +18,10 @@ export const MenuItem = ({ provided, item }: MenuItemProps) => {
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       style={{
-        userSelect: 'none',
-        padding: '10px',
-        margin: '0 0 8px 0',
-        backgroundColor: 'white',
-        borderRadius: '4px',
         boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
         ...provided.draggableProps.style,
       }}
+      className={cn('select-none p-[10px] mb-2 bg-white rounded-[4px] ')}
     >
       {item.option}
     </div>
@@ -35,26 +31,21 @@ export const MenuItem = ({ provided, item }: MenuItemProps) => {
 interface MenuProps {
   provided: DroppableProvided;
   menuOptions: TMenu[];
-  style: CSSProperties;
   droppableId: string;
+  className: string;
 }
 
 export const Menu = ({
   provided,
   menuOptions,
-  style,
   droppableId,
+  className,
 }: MenuProps) => {
   return (
     <div
       ref={provided.innerRef}
       {...provided.droppableProps}
-      style={{
-        minHeight: '300px',
-        padding: '10px',
-        borderRadius: '8px',
-        ...style,
-      }}
+      className={cn('min-h-[300px] p-[10px] rounded-lg', className)}
     >
       {menuOptions.map((item, index) => (
         <Draggable

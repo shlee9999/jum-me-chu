@@ -4,6 +4,8 @@ import { Wheel } from 'react-custom-roulette';
 import { Menu } from './components/Menu';
 import { menuOptions } from './constants/matzib-list';
 import { TMenu } from './types/menu';
+import { cn } from './utils/cn';
+import './styles/global.css';
 
 function App() {
   // 활성 메뉴와 비활성 메뉴를 분리하여 상태 관리
@@ -135,17 +137,11 @@ function App() {
 
   return (
     <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: 'aliceblue',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px',
-      }}
+      className={cn(
+        'min-h-screen bg-blue-50 flex flex-col justify-center items-center p-5'
+      )}
     >
-      <h1 style={{ fontFamily: 'Arial, sans-serif', color: '#333' }}>
+      <h1 className='font-sans text-gray-800 text-3xl font-bold mb-6'>
         점심 메뉴 룰렛 🎯
       </h1>
       <Wheel
@@ -186,65 +182,35 @@ function App() {
       />
       <button
         onClick={handleSpinClick}
-        style={{
-          marginTop: '20px',
-          padding: '10px 20px',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          backgroundColor: '#64b031',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)',
-        }}
+        className={cn(
+          'mt-5 px-5 py-2.5 text-lg font-bold bg-green-500 text-white border-none',
+          'rounded-md cursor-pointer shadow-md hover:bg-green-600 transition-colors'
+        )}
       >
         SPIN
       </button>
-      <form
-        onSubmit={onSubmit}
-        style={{
-          margin: '20px 0',
-          display: 'flex',
-          gap: '10px',
-        }}
-      >
+      <form onSubmit={onSubmit} className='mt-5 flex gap-2.5'>
         <input
           type='text'
           onChange={onChange}
           value={inputValue}
           placeholder='새 메뉴 입력'
-          style={{
-            padding: '8px',
-            borderRadius: '4px',
-            border: '1px solid #ccc',
-          }}
+          className='p-2 rounded-md border border-gray-300'
         />
         <button
-          style={{
-            padding: '8px 15px',
-            backgroundColor: '#175fa9',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className={cn(
+            'px-4 py-2 bg-blue-600 text-white border-none rounded-md cursor-pointer',
+            'hover:bg-blue-700 transition-colors'
+          )}
         >
           추가
         </button>
       </form>
 
-      <div
-        style={{
-          display: 'flex',
-          width: '100%',
-          justifyContent: 'center',
-          gap: '40px',
-        }}
-      >
+      <div className='flex w-full justify-center gap-10 mt-6'>
         <DragDropContext onDragEnd={onDragEnd}>
-          <div style={{ width: '40%' }}>
-            <h3 style={{ textAlign: 'center', color: '#175fa9' }}>
+          <div className='w-2/5'>
+            <h3 className='text-center text-blue-600 font-semibold mb-3'>
               맛집 리스트
             </h3>
             <Droppable droppableId='active'>
@@ -252,18 +218,15 @@ function App() {
                 <Menu
                   menuOptions={activeMenuOptions}
                   provided={provided}
-                  style={{
-                    backgroundColor: '#e6f7ff',
-                    border: '1px solid #175fa9',
-                  }}
+                  className='bg-blue-100 border border-blue-600 rounded-md p-3'
                   droppableId='active'
                 />
               )}
             </Droppable>
           </div>
 
-          <div style={{ width: '40%' }}>
-            <h3 style={{ textAlign: 'center', color: '#dc0936' }}>
+          <div className='w-2/5'>
+            <h3 className='text-center text-red-600 font-semibold mb-3'>
               오늘은 안갈래
             </h3>
             <Droppable droppableId='inactive'>
@@ -271,10 +234,7 @@ function App() {
                 <Menu
                   menuOptions={inactiveMenuOptions}
                   provided={provided}
-                  style={{
-                    backgroundColor: '#ffebeb',
-                    border: '1px solid #dc0936',
-                  }}
+                  className='bg-red-100 border border-red-600 rounded-md p-3'
                   droppableId='inactive'
                 />
               )}
