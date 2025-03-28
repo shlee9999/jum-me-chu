@@ -33,7 +33,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
 
   // Handle delete action
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete "${item.option}"?`)) {
+    if (confirm(`정말 "${item.option}"을(를) 삭제하시겠어요?`)) {
       removeMenu(item.id);
     }
   };

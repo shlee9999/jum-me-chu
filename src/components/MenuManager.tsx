@@ -66,8 +66,13 @@ export const MenuManager = () => {
     <div className='flex w-full justify-center gap-10 mt-6'>
       <button
         onClick={() => {
-          localStorage.clear();
-          location.reload();
+          const isAllowed = confirm(
+            '모든 리스트가 첫 방문 시로 돌아가며, 복구할 수 없습니다. 정말 초기화하시겠습니까? '
+          );
+          if (isAllowed) {
+            localStorage.clear();
+            location.reload();
+          }
         }}
       >
         초기화
@@ -77,7 +82,16 @@ export const MenuManager = () => {
           <h3 className='text-center text-blue-600 font-semibold mb-3'>
             맛집 리스트
           </h3>
-          <button onClick={initActiveMenu}>전부 비우기</button>
+          <button
+            onClick={() => {
+              const isAllowed = confirm(
+                '맛집 리스트가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
+              );
+              if (isAllowed) initActiveMenu();
+            }}
+          >
+            전부 비우기
+          </button>
           <Droppable droppableId='active'>
             {(provided) => (
               <Menu
@@ -94,7 +108,16 @@ export const MenuManager = () => {
           <h3 className='text-center text-red-600 font-semibold mb-3'>
             오늘은 안갈래
           </h3>
-          <button onClick={initInactiveMenu}>전부 비우기</button>
+          <button
+            onClick={() => {
+              const isAllowed = confirm(
+                '오늘 안갈래가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
+              );
+              if (isAllowed) initInactiveMenu();
+            }}
+          >
+            전부 비우기
+          </button>
           <Droppable droppableId='inactive'>
             {(provided) => (
               <Menu
