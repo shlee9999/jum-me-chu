@@ -25,7 +25,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
   const removeMenu = type === 'active' ? removeActiveMenu : removeInactiveMenu;
   // Handle edit action
   const handleEdit = () => {
-    const newLabel = prompt('Edit menu label:', item.option); // Prompt for new label
+    const newLabel = prompt('메뉴 이름 바꾸기', item.option); // Prompt for new label
     if (newLabel) {
       editMenu({ ...item, option: newLabel });
     }
