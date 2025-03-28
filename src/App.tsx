@@ -1,32 +1,23 @@
 import { useEffect, useState } from 'react';
-import { menuOptions } from './constants/matzib-list';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Wheel } from 'react-custom-roulette';
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from 'react-beautiful-dnd';
+import { Menu } from './components/Menu';
+import { menuOptions } from './constants/matzib-list';
+import { TMenu } from './types/menu';
 
 function App() {
   // 활성 메뉴와 비활성 메뉴를 분리하여 상태 관리
-  const [activeMenuOptions, setActiveMenuOptions] = useState<
-    {
-      option: string;
-    }[]
-  >(() => {
+  const [activeMenuOptions, setActiveMenuOptions] = useState<TMenu[]>(() => {
     const savedMenus = localStorage.getItem('activeMenuOptions');
     return savedMenus ? JSON.parse(savedMenus) : menuOptions;
   });
 
-  const [inactiveMenuOptions, setInactiveMenuOptions] = useState<
-    {
-      option: string;
-    }[]
-  >(() => {
-    const savedInactiveMenus = localStorage.getItem('inactiveMenuOptions');
-    return savedInactiveMenus ? JSON.parse(savedInactiveMenus) : [];
-  });
+  const [inactiveMenuOptions, setInactiveMenuOptions] = useState<TMenu[]>(
+    () => {
+      const savedInactiveMenus = localStorage.getItem('inactiveMenuOptions');
+      return savedInactiveMenus ? JSON.parse(savedInactiveMenus) : [];
+    }
+  );
 
   const [inputValue, setInputValue] = useState('');
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -258,45 +249,15 @@ function App() {
             </h3>
             <Droppable droppableId='active'>
               {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+                <Menu
+                  menuOptions={activeMenuOptions}
+                  provided={provided}
                   style={{
-                    minHeight: '300px',
-                    padding: '10px',
                     backgroundColor: '#e6f7ff',
-                    borderRadius: '8px',
                     border: '1px solid #175fa9',
                   }}
-                >
-                  {activeMenuOptions.map((item, index) => (
-                    <Draggable
-                      key={`active-${item.option}`}
-                      draggableId={`active-${item.option}`}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            userSelect: 'none',
-                            padding: '10px',
-                            margin: '0 0 8px 0',
-                            backgroundColor: 'white',
-                            borderRadius: '4px',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {item.option}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
+                  droppableId='active'
+                />
               )}
             </Droppable>
           </div>
@@ -307,45 +268,15 @@ function App() {
             </h3>
             <Droppable droppableId='inactive'>
               {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
+                <Menu
+                  menuOptions={inactiveMenuOptions}
+                  provided={provided}
                   style={{
-                    minHeight: '300px',
-                    padding: '10px',
                     backgroundColor: '#ffebeb',
-                    borderRadius: '8px',
                     border: '1px solid #dc0936',
                   }}
-                >
-                  {inactiveMenuOptions.map((item, index) => (
-                    <Draggable
-                      key={`inactive-${item.option}`}
-                      draggableId={`inactive-${item.option}`}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={{
-                            userSelect: 'none',
-                            padding: '10px',
-                            margin: '0 0 8px 0',
-                            backgroundColor: 'white',
-                            borderRadius: '4px',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
-                            ...provided.draggableProps.style,
-                          }}
-                        >
-                          {item.option}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
+                  droppableId='inactive'
+                />
               )}
             </Droppable>
           </div>
