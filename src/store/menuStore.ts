@@ -15,6 +15,7 @@ interface MenuState {
   removeInactiveMenu: (menuOption: string) => void;
   initActiveMenu: () => void;
   initInactiveMenu: () => void;
+  shuffleActiveMenus: () => void; // Active menus shuffle method
 }
 
 export const useMenuStore = create<MenuState>((set) => {
@@ -83,9 +84,9 @@ export const useMenuStore = create<MenuState>((set) => {
     editActiveMenu: (menu) =>
       set((state) => {
         console.log(menu);
-        const updatedMenus = state.activeMenus.map((activeMenu) => {
-          return activeMenu.id === menu.id ? menu : activeMenu;
-        });
+        const updatedMenus = state.activeMenus.map((activeMenu) =>
+          activeMenu.id === menu.id ? menu : activeMenu
+        );
 
         localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
         return { activeMenus: updatedMenus };
@@ -133,6 +134,14 @@ export const useMenuStore = create<MenuState>((set) => {
       set(() => {
         localStorage.setItem('inactiveMenus', JSON.stringify([]));
         return { inactiveMenus: [] };
+      }),
+
+    // Shuffle active menus
+    shuffleActiveMenus: () =>
+      set((state) => {
+        const shuffled = [...state.activeMenus].sort(() => Math.random() - 0.5);
+        localStorage.setItem('activeMenus', JSON.stringify(shuffled));
+        return { activeMenus: shuffled };
       }),
   };
 });

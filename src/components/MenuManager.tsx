@@ -10,6 +10,7 @@ export const MenuManager = () => {
     setInactiveMenus,
     initActiveMenu,
     initInactiveMenu,
+    shuffleActiveMenus,
   } = useMenuStore();
 
   const onDragEnd = (result: DropResult) => {
@@ -74,24 +75,35 @@ export const MenuManager = () => {
             location.reload();
           }
         }}
+        className='bg-gray-200 p-2 rounded-md'
       >
         초기화
       </button>
+
       <DragDropContext onDragEnd={onDragEnd}>
         <div className='w-2/5'>
           <h3 className='text-center text-blue-600 font-semibold mb-3'>
             맛집 리스트
           </h3>
-          <button
-            onClick={() => {
-              const isAllowed = confirm(
-                '맛집 리스트가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
-              );
-              if (isAllowed) initActiveMenu();
-            }}
-          >
-            전부 비우기
-          </button>
+          <div className='flex justify-between mb-3'>
+            <button
+              onClick={() => {
+                const isAllowed = confirm(
+                  '맛집 리스트가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
+                );
+                if (isAllowed) initActiveMenu();
+              }}
+              className='bg-red-200 p-2 rounded-md'
+            >
+              전부 비우기
+            </button>
+            <button
+              onClick={() => shuffleActiveMenus()}
+              className='bg-blue-200 p-2 rounded-md'
+            >
+              셔플
+            </button>
+          </div>
           <Droppable droppableId='active'>
             {(provided) => (
               <Menu
@@ -108,16 +120,19 @@ export const MenuManager = () => {
           <h3 className='text-center text-red-600 font-semibold mb-3'>
             오늘은 안갈래
           </h3>
-          <button
-            onClick={() => {
-              const isAllowed = confirm(
-                '오늘 안갈래가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
-              );
-              if (isAllowed) initInactiveMenu();
-            }}
-          >
-            전부 비우기
-          </button>
+          <div className='flex justify-between mb-3'>
+            <button
+              onClick={() => {
+                const isAllowed = confirm(
+                  '오늘 안갈래가 모두 삭제되며, 복구할 수 없습니다. 삭제하시겠습니까?'
+                );
+                if (isAllowed) initInactiveMenu();
+              }}
+              className='bg-red-200 p-2 rounded-md'
+            >
+              전부 비우기
+            </button>
+          </div>
           <Droppable droppableId='inactive'>
             {(provided) => (
               <Menu
