@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { TMenu } from '../types/menu';
+import { initialMenus } from '../constants/initialMenus';
 
 interface MenuState {
   activeMenus: TMenu[];
@@ -14,97 +15,108 @@ interface MenuState {
   removeInactiveMenu: (menuOption: string) => void;
 }
 
-export const useMenuStore = create<MenuState>((set) => ({
-  activeMenus: JSON.parse(localStorage.getItem('activeMenus') || '[]'),
-  inactiveMenus: JSON.parse(localStorage.getItem('inactiveMenus') || '[]'),
+export const useMenuStore = create<MenuState>((set) => {
+  // 첫 방문 시 localStorage 초기화
+  if (
+    !localStorage.getItem('activeMenus') &&
+    !localStorage.getItem('inactiveMenus')
+  ) {
+    localStorage.setItem('activeMenus', JSON.stringify(initialMenus));
+    localStorage.setItem('inactiveMenus', JSON.stringify([]));
+  }
 
-  // Set active menus
-  setActiveMenus: (menus) =>
-    set(() => {
-      localStorage.setItem('activeMenus', JSON.stringify(menus));
-      return { activeMenus: menus };
-    }),
+  return {
+    activeMenus: JSON.parse(localStorage.getItem('activeMenus') || '[]'),
+    inactiveMenus: JSON.parse(localStorage.getItem('inactiveMenus') || '[]'),
 
-  // Set inactive menus
-  setInactiveMenus: (menus) =>
-    set(() => {
-      localStorage.setItem('inactiveMenus', JSON.stringify(menus));
-      return { inactiveMenus: menus };
-    }),
+    // Set active menus
+    setActiveMenus: (menus) =>
+      set(() => {
+        localStorage.setItem('activeMenus', JSON.stringify(menus));
+        return { activeMenus: menus };
+      }),
 
-  // Add a menu to active menus with duplicate check
-  addActiveMenu: (menu) =>
-    set((state) => {
-      const isDuplicate = state.activeMenus.some(
-        (activeMenu) => activeMenu.option === menu.option
-      );
-      if (isDuplicate) {
-        console.warn(
-          'Duplicate menu detected in activeMenus. Skipping addition.'
+    // Set inactive menus
+    setInactiveMenus: (menus) =>
+      set(() => {
+        localStorage.setItem('inactiveMenus', JSON.stringify(menus));
+        return { inactiveMenus: menus };
+      }),
+
+    // Add a menu to active menus with duplicate check
+    addActiveMenu: (menu) =>
+      set((state) => {
+        const isDuplicate = state.activeMenus.some(
+          (activeMenu) => activeMenu.option === menu.option
         );
-        return state; // Return the current state without modification
-      }
-      const updatedMenus = [...state.activeMenus, menu];
-      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
-      return { activeMenus: updatedMenus };
-    }),
+        if (isDuplicate) {
+          console.warn(
+            'Duplicate menu detected in activeMenus. Skipping addition.'
+          );
+          return state; // Return the current state without modification
+        }
+        const updatedMenus = [...state.activeMenus, menu];
+        localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
+        return { activeMenus: updatedMenus };
+      }),
 
-  // Add a menu to inactive menus with duplicate check
-  addInactiveMenu: (menu) =>
-    set((state) => {
-      const isDuplicate = state.inactiveMenus.some(
-        (inactiveMenu) => inactiveMenu.option === menu.option
-      );
-      if (isDuplicate) {
-        console.warn(
-          'Duplicate menu detected in inactiveMenus. Skipping addition.'
+    // Add a menu to inactive menus with duplicate check
+    addInactiveMenu: (menu) =>
+      set((state) => {
+        const isDuplicate = state.inactiveMenus.some(
+          (inactiveMenu) => inactiveMenu.option === menu.option
         );
-        return state; // Return the current state without modification
-      }
-      const updatedMenus = [...state.inactiveMenus, menu];
-      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
-      return { inactiveMenus: updatedMenus };
-    }),
+        if (isDuplicate) {
+          console.warn(
+            'Duplicate menu detected in inactiveMenus. Skipping addition.'
+          );
+          return state; // Return the current state without modification
+        }
+        const updatedMenus = [...state.inactiveMenus, menu];
+        localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
+        return { inactiveMenus: updatedMenus };
+      }),
 
-  // Edit a menu in active menus
-  editActiveMenu: (menu) =>
-    set((state) => {
-      console.log(menu);
-      const updatedMenus = state.activeMenus.map((activeMenu) => {
-        return activeMenu.id === menu.id ? menu : activeMenu;
-      });
+    // Edit a menu in active menus
+    editActiveMenu: (menu) =>
+      set((state) => {
+        console.log(menu);
+        const updatedMenus = state.activeMenus.map((activeMenu) => {
+          return activeMenu.id === menu.id ? menu : activeMenu;
+        });
 
-      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
-      return { activeMenus: updatedMenus };
-    }),
+        localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
+        return { activeMenus: updatedMenus };
+      }),
 
-  // Edit a menu in inactive menus
-  editInactiveMenu: (menu) =>
-    set((state) => {
-      const updatedMenus = state.inactiveMenus.map((inactiveMenu) =>
-        inactiveMenu.id === menu.id ? menu : inactiveMenu
-      );
-      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
-      return { inactiveMenus: updatedMenus };
-    }),
+    // Edit a menu in inactive menus
+    editInactiveMenu: (menu) =>
+      set((state) => {
+        const updatedMenus = state.inactiveMenus.map((inactiveMenu) =>
+          inactiveMenu.id === menu.id ? menu : inactiveMenu
+        );
+        localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
+        return { inactiveMenus: updatedMenus };
+      }),
 
-  // Remove a menu from active menus
-  removeActiveMenu: (id) =>
-    set((state) => {
-      const updatedMenus = state.activeMenus.filter(
-        (activeMenu) => activeMenu.id !== id
-      );
-      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
-      return { activeMenus: updatedMenus };
-    }),
+    // Remove a menu from active menus
+    removeActiveMenu: (id) =>
+      set((state) => {
+        const updatedMenus = state.activeMenus.filter(
+          (activeMenu) => activeMenu.id !== id
+        );
+        localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
+        return { activeMenus: updatedMenus };
+      }),
 
-  // Remove a menu from inactive menus
-  removeInactiveMenu: (id) =>
-    set((state) => {
-      const updatedMenus = state.inactiveMenus.filter(
-        (inactiveMenu) => inactiveMenu.id !== id
-      );
-      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
-      return { inactiveMenus: updatedMenus };
-    }),
-}));
+    // Remove a menu from inactive menus
+    removeInactiveMenu: (id) =>
+      set((state) => {
+        const updatedMenus = state.inactiveMenus.filter(
+          (inactiveMenu) => inactiveMenu.id !== id
+        );
+        localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
+        return { inactiveMenus: updatedMenus };
+      }),
+  };
+});

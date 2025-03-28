@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 // 메뉴 목록
-const menuList = [
+const initialMenuList = [
   '부대찌개집 송탄',
   '부대찌개집 지하?',
   '유타로',
@@ -26,7 +26,7 @@ const menuList = [
 ];
 
 // 메뉴 객체 배열 생성
-export const menuOptions = menuList.map((option) => ({
+export const initialMenus = initialMenuList.map((option) => ({
   option,
   id: v4(),
 }));
