@@ -8,6 +8,10 @@ interface MenuState {
   setInactiveMenus: (menus: TMenu[]) => void;
   addActiveMenu: (menu: TMenu) => void;
   addInactiveMenu: (menu: TMenu) => void;
+  editActiveMenu: (menu: TMenu) => void;
+  editInactiveMenu: (menu: TMenu) => void;
+  removeActiveMenu: (menuOption: string) => void;
+  removeInactiveMenu: (menuOption: string) => void;
 }
 
 export const useMenuStore = create<MenuState>((set) => ({
@@ -32,7 +36,7 @@ export const useMenuStore = create<MenuState>((set) => ({
   addActiveMenu: (menu) =>
     set((state) => {
       const isDuplicate = state.activeMenus.some(
-        (activeMenu) => activeMenu.option === menu.option // Assuming TMenu has an `id` property for comparison
+        (activeMenu) => activeMenu.option === menu.option
       );
       if (isDuplicate) {
         console.warn(
@@ -49,7 +53,7 @@ export const useMenuStore = create<MenuState>((set) => ({
   addInactiveMenu: (menu) =>
     set((state) => {
       const isDuplicate = state.inactiveMenus.some(
-        (inactiveMenu) => inactiveMenu.option === menu.option // Assuming TMenu has an `id` property for comparison
+        (inactiveMenu) => inactiveMenu.option === menu.option
       );
       if (isDuplicate) {
         console.warn(
@@ -58,6 +62,48 @@ export const useMenuStore = create<MenuState>((set) => ({
         return state; // Return the current state without modification
       }
       const updatedMenus = [...state.inactiveMenus, menu];
+      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
+      return { inactiveMenus: updatedMenus };
+    }),
+
+  // Edit a menu in active menus
+  editActiveMenu: (menu) =>
+    set((state) => {
+      console.log(menu);
+      const updatedMenus = state.activeMenus.map((activeMenu) => {
+        return activeMenu.id === menu.id ? menu : activeMenu;
+      });
+
+      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
+      return { activeMenus: updatedMenus };
+    }),
+
+  // Edit a menu in inactive menus
+  editInactiveMenu: (menu) =>
+    set((state) => {
+      const updatedMenus = state.inactiveMenus.map((inactiveMenu) =>
+        inactiveMenu.id === menu.id ? menu : inactiveMenu
+      );
+      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
+      return { inactiveMenus: updatedMenus };
+    }),
+
+  // Remove a menu from active menus
+  removeActiveMenu: (id) =>
+    set((state) => {
+      const updatedMenus = state.activeMenus.filter(
+        (activeMenu) => activeMenu.id !== id
+      );
+      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
+      return { activeMenus: updatedMenus };
+    }),
+
+  // Remove a menu from inactive menus
+  removeInactiveMenu: (id) =>
+    set((state) => {
+      const updatedMenus = state.inactiveMenus.filter(
+        (inactiveMenu) => inactiveMenu.id !== id
+      );
       localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
       return { inactiveMenus: updatedMenus };
     }),

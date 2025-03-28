@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useMenuStore } from '../store/menuStore';
 import { cn } from '../utils/cn';
+import { v4 } from 'uuid';
 
 export const AddForm = () => {
-  const { addActiveMenu, activeMenus, inactiveMenus } = useMenuStore();
+  const { addActiveMenu } = useMenuStore();
 
   const [inputValue, setInputValue] = useState('');
 
@@ -14,7 +15,7 @@ export const AddForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      addActiveMenu({ option: inputValue });
+      addActiveMenu({ option: inputValue, id: v4() });
       setInputValue('');
     }
   };

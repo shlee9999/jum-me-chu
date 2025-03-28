@@ -14,18 +14,26 @@ export const Roulette = () => {
       const newPrizeNumber = Math.floor(Math.random() * activeMenus.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
-    } else if (activeMenus.length === 0) {
-      alert(
-        '활성화된 메뉴가 없습니다. 메뉴를 추가하거나 비활성 메뉴를 활성화해주세요.'
-      );
     }
   };
+
   return (
     <>
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
-        data={activeMenus}
+        data={
+          activeMenus.length
+            ? activeMenus
+            : [
+                {
+                  option: '',
+                  style: {
+                    backgroundColor: 'gray',
+                  },
+                },
+              ]
+        }
         backgroundColors={backgroundColors}
         textColors={['#ffffff']}
         outerBorderColor='#000'
@@ -49,8 +57,10 @@ export const Roulette = () => {
         onClick={handleSpinClick}
         className={cn(
           'mt-5 px-5 py-2.5 text-lg font-bold bg-green-500 text-white border-none',
-          'rounded-md cursor-pointer shadow-md hover:bg-green-600 transition-colors'
+          'rounded-md cursor-pointer shadow-md hover:bg-green-600 transition-colors',
+          'disabled:bg-gray-500 disabled:text-gray-400'
         )}
+        disabled={!activeMenus.length}
       >
         SPIN
       </button>

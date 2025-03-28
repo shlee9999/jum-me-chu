@@ -5,13 +5,39 @@ import {
 } from 'react-beautiful-dnd';
 import { TMenu } from '../types/menu';
 import { cn } from '../utils/cn';
+import { useMenuStore } from '../store/menuStore';
+import { TDroppableId } from '../types/dnd';
 
 interface MenuItemProps {
   provided: DraggableProvided;
   item: TMenu;
+  type: TDroppableId;
 }
 
-export const MenuItem = ({ provided, item }: MenuItemProps) => {
+export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
+  const {
+    editActiveMenu,
+    removeActiveMenu,
+    editInactiveMenu,
+    removeInactiveMenu,
+  } = useMenuStore(); // Access Zustand store actions
+  const editMenu = type === 'active' ? editActiveMenu : editInactiveMenu;
+  const removeMenu = type === 'active' ? removeActiveMenu : removeInactiveMenu;
+  // Handle edit action
+  const handleEdit = () => {
+    const newLabel = prompt('Edit menu label:', item.option); // Prompt for new label
+    if (newLabel) {
+      editMenu({ ...item, option: newLabel });
+    }
+  };
+
+  // Handle delete action
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${item.option}"?`)) {
+      removeMenu(item.id);
+    }
+  };
+
   return (
     <div
       ref={provided.innerRef}
@@ -21,17 +47,37 @@ export const MenuItem = ({ provided, item }: MenuItemProps) => {
         boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
         ...provided.draggableProps.style,
       }}
-      className={cn('select-none p-[10px] mb-2 bg-white rounded-[4px] ')}
+      className={cn(
+        'select-none p-[10px] mb-2 bg-white rounded-[4px] flex justify-between items-center'
+      )}
     >
-      {item.option}
+      <span>{item.option}</span>
+      <div className='flex gap-2'>
+        {/* Edit button */}
+        <button
+          onClick={handleEdit}
+          className='text-blue-500 hover:text-blue-700'
+          aria-label='Edit menu'
+        >
+          ✏️
+        </button>
+
+        {/* Delete button */}
+        <button
+          onClick={handleDelete}
+          className='text-red-500 hover:text-red-700'
+          aria-label='Delete menu'
+        >
+          🗑️
+        </button>
+      </div>
     </div>
   );
 };
-
 interface MenuProps {
   provided: DroppableProvided;
   menuOptions: TMenu[];
-  droppableId: string;
+  droppableId: TDroppableId;
   className: string;
 }
 
@@ -53,7 +99,9 @@ export const Menu = ({
           draggableId={`${droppableId}-${item.option}`}
           index={index}
         >
-          {(provided) => <MenuItem item={item} provided={provided} />}
+          {(provided) => (
+            <MenuItem item={item} provided={provided} type={droppableId} />
+          )}
         </Draggable>
       ))}
       {provided.placeholder}

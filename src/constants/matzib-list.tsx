@@ -1,3 +1,5 @@
+import { v4 } from 'uuid';
+
 // 메뉴 목록
 const menuList = [
   '부대찌개집 송탄',
@@ -26,4 +28,5 @@ const menuList = [
 // 메뉴 객체 배열 생성
 export const menuOptions = menuList.map((option) => ({
   option,
+  id: v4(),
 }));

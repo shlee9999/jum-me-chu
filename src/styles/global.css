@@ -3,6 +3,17 @@
 @tailwind utilities;
 
 @layer base {
+  button {
+    @apply cursor-pointer;
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+  }
+
+  input,
+  textarea {
+    @apply outline-none;
+  }
 }
 
 @layer components {
