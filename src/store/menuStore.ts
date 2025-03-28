@@ -58,7 +58,7 @@ export const useMenuStore = create<MenuState>((set) => {
           );
           return state; // Return the current state without modification
         }
-        const updatedMenus = [...state.activeMenus, menu];
+        const updatedMenus = [menu, ...state.activeMenus];
         localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
         return { activeMenus: updatedMenus };
       }),
@@ -75,7 +75,7 @@ export const useMenuStore = create<MenuState>((set) => {
           );
           return state; // Return the current state without modification
         }
-        const updatedMenus = [...state.inactiveMenus, menu];
+        const updatedMenus = [menu, ...state.inactiveMenus];
         localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
         return { inactiveMenus: updatedMenus };
       }),

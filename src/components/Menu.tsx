@@ -7,7 +7,6 @@ import { TMenu } from '../types/menu';
 import { cn } from '../utils/cn';
 import { useMenuStore } from '../store/menuStore';
 import { TDroppableId } from '../types/dnd';
-
 interface MenuItemProps {
   provided: DraggableProvided;
   item: TMenu;
@@ -20,9 +19,14 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
     removeActiveMenu,
     editInactiveMenu,
     removeInactiveMenu,
-  } = useMenuStore(); // Access Zustand store actions
+    addActiveMenu,
+    addInactiveMenu,
+  } = useMenuStore(); // Access Zustand store actions and state
+
   const editMenu = type === 'active' ? editActiveMenu : editInactiveMenu;
   const removeMenu = type === 'active' ? removeActiveMenu : removeInactiveMenu;
+  const addAnotherMenu = type === 'active' ? addInactiveMenu : addActiveMenu;
+
   // Handle edit action
   const handleEdit = () => {
     const newLabel = prompt('메뉴 이름 바꾸기', item.option); // Prompt for new label
@@ -38,6 +42,12 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
     }
   };
 
+  // Handle menu item click to move to the opposite menu
+  const onClickMenu = () => {
+    removeMenu(item.id);
+    addAnotherMenu(item);
+  };
+
   return (
     <div
       ref={provided.innerRef}
@@ -50,6 +60,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
       className={cn(
         'select-none p-[10px] mb-2 bg-white rounded-[4px] flex justify-between items-center'
       )}
+      onClick={onClickMenu} // Attach onClick handler
     >
       <span>{item.option}</span>
       <div className='flex gap-2'>
@@ -74,6 +85,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
     </div>
   );
 };
+
 interface MenuProps {
   provided: DroppableProvided;
   menuOptions: TMenu[];
