@@ -60,7 +60,7 @@ export const Roulette = () => {
           'rounded-md cursor-pointer shadow-md hover:bg-green-600 transition-colors',
           'disabled:bg-gray-500 disabled:text-gray-400'
         )}
-        disabled={!activeMenus.length}
+        disabled={!activeMenus.length || mustSpin}
       >
         SPIN
       </button>
