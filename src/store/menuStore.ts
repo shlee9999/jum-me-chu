@@ -11,38 +11,54 @@ interface MenuState {
 }
 
 export const useMenuStore = create<MenuState>((set) => ({
-  activeMenus: JSON.parse(localStorage.getItem('activeMenuOptions') || '[]'),
-  inactiveMenus: JSON.parse(
-    localStorage.getItem('inactiveMenuOptions') || '[]'
-  ),
+  activeMenus: JSON.parse(localStorage.getItem('activeMenus') || '[]'),
+  inactiveMenus: JSON.parse(localStorage.getItem('inactiveMenus') || '[]'),
 
   // Set active menus
   setActiveMenus: (menus) =>
     set(() => {
-      localStorage.setItem('activeMenuOptions', JSON.stringify(menus));
+      localStorage.setItem('activeMenus', JSON.stringify(menus));
       return { activeMenus: menus };
     }),
 
   // Set inactive menus
   setInactiveMenus: (menus) =>
     set(() => {
-      localStorage.setItem('inactiveMenuOptions', JSON.stringify(menus));
+      localStorage.setItem('inactiveMenus', JSON.stringify(menus));
       return { inactiveMenus: menus };
     }),
 
-  // Add a menu to active menus
+  // Add a menu to active menus with duplicate check
   addActiveMenu: (menu) =>
     set((state) => {
+      const isDuplicate = state.activeMenus.some(
+        (activeMenu) => activeMenu.option === menu.option // Assuming TMenu has an `id` property for comparison
+      );
+      if (isDuplicate) {
+        console.warn(
+          'Duplicate menu detected in activeMenus. Skipping addition.'
+        );
+        return state; // Return the current state without modification
+      }
       const updatedMenus = [...state.activeMenus, menu];
-      localStorage.setItem('activeMenuOptions', JSON.stringify(updatedMenus));
+      localStorage.setItem('activeMenus', JSON.stringify(updatedMenus));
       return { activeMenus: updatedMenus };
     }),
 
-  // Add a menu to inactive menus
+  // Add a menu to inactive menus with duplicate check
   addInactiveMenu: (menu) =>
     set((state) => {
+      const isDuplicate = state.inactiveMenus.some(
+        (inactiveMenu) => inactiveMenu.option === menu.option // Assuming TMenu has an `id` property for comparison
+      );
+      if (isDuplicate) {
+        console.warn(
+          'Duplicate menu detected in inactiveMenus. Skipping addition.'
+        );
+        return state; // Return the current state without modification
+      }
       const updatedMenus = [...state.inactiveMenus, menu];
-      localStorage.setItem('inactiveMenuOptions', JSON.stringify(updatedMenus));
+      localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
       return { inactiveMenus: updatedMenus };
     }),
 }));

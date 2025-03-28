@@ -3,7 +3,7 @@ import { useMenuStore } from '../store/menuStore';
 import { cn } from '../utils/cn';
 
 export const AddForm = () => {
-  const { addActiveMenu } = useMenuStore();
+  const { addActiveMenu, activeMenus, inactiveMenus } = useMenuStore();
 
   const [inputValue, setInputValue] = useState('');
 
