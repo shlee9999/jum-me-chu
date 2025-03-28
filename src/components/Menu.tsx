@@ -91,7 +91,7 @@ export const Menu = ({
     <div
       ref={provided.innerRef}
       {...provided.droppableProps}
-      className={cn('min-h-[300px] p-[10px] rounded-lg', className)}
+      className={cn('h-[500px] p-[10px] rounded-lg overflow-auto', className)}
     >
       {menuOptions.map((item, index) => (
         <Draggable
