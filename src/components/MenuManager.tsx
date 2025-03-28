@@ -8,7 +8,8 @@ export const MenuManager = () => {
     inactiveMenus,
     setActiveMenus,
     setInactiveMenus,
-    // addActiveMenu,
+    initActiveMenu,
+    initInactiveMenu,
   } = useMenuStore();
 
   const onDragEnd = (result: DropResult) => {
@@ -63,11 +64,20 @@ export const MenuManager = () => {
 
   return (
     <div className='flex w-full justify-center gap-10 mt-6'>
+      <button
+        onClick={() => {
+          localStorage.clear();
+          location.reload();
+        }}
+      >
+        초기화
+      </button>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className='w-2/5'>
           <h3 className='text-center text-blue-600 font-semibold mb-3'>
             맛집 리스트
           </h3>
+          <button onClick={initActiveMenu}>전부 비우기</button>
           <Droppable droppableId='active'>
             {(provided) => (
               <Menu
@@ -84,6 +94,7 @@ export const MenuManager = () => {
           <h3 className='text-center text-red-600 font-semibold mb-3'>
             오늘은 안갈래
           </h3>
+          <button onClick={initInactiveMenu}>전부 비우기</button>
           <Droppable droppableId='inactive'>
             {(provided) => (
               <Menu

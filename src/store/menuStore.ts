@@ -13,6 +13,8 @@ interface MenuState {
   editInactiveMenu: (menu: TMenu) => void;
   removeActiveMenu: (menuOption: string) => void;
   removeInactiveMenu: (menuOption: string) => void;
+  initActiveMenu: () => void;
+  initInactiveMenu: () => void;
 }
 
 export const useMenuStore = create<MenuState>((set) => {
@@ -117,6 +119,20 @@ export const useMenuStore = create<MenuState>((set) => {
         );
         localStorage.setItem('inactiveMenus', JSON.stringify(updatedMenus));
         return { inactiveMenus: updatedMenus };
+      }),
+
+    // Initialize active menus
+    initActiveMenu: () =>
+      set(() => {
+        localStorage.setItem('activeMenus', JSON.stringify([]));
+        return { activeMenus: [] };
+      }),
+
+    // Initialize inactive menus
+    initInactiveMenu: () =>
+      set(() => {
+        localStorage.setItem('inactiveMenus', JSON.stringify([]));
+        return { inactiveMenus: [] };
       }),
   };
 });
