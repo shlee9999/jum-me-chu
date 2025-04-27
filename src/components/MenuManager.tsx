@@ -6,52 +6,11 @@ import { cn } from '../utils/cn';
 
 export const MenuManager = () => {
   const { onDragEnd } = useMenuManager();
-  const {
-    activeMenus,
-    inactiveMenus,
-    initActiveMenu,
-    initInactiveMenu,
-    shuffleActiveMenus,
-  } = useMenuStore();
+  const { activeMenus, inactiveMenus, initActiveMenu, initInactiveMenu } =
+    useMenuStore();
 
   return (
-    <div className='flex flex-col items-center w-full mt-12 px-4'>
-      {/* Header Section */}
-      <div className='flex flex-col sm:flex-row justify-between w-full max-w-6xl mb-8 gap-4'>
-        <div className='flex gap-4'>
-          <button
-            onClick={() => {
-              const isAllowed = confirm(
-                '모든 리스트가 첫 방문 시로 돌아가며, 복구할 수 없습니다. 정말 초기화하시겠습니까? '
-              );
-              if (isAllowed) {
-                localStorage.clear();
-                location.reload();
-              }
-            }}
-            className={cn(
-              'px-5 py-2.5 bg-gray-700 text-white',
-              'rounded-lg shadow-md hover:bg-gray-600',
-              'transition-all transform hover:scale-105 active:scale-95',
-              'w-full sm:w-auto'
-            )}
-          >
-            초기화
-          </button>
-          <button
-            onClick={() => shuffleActiveMenus()}
-            className={cn(
-              'px-5 py-2.5 bg-primary-600 text-white',
-              'rounded-lg shadow-md hover:bg-primary-700',
-              'transition-all transform hover:scale-105 active:scale-95',
-              'w-full sm:w-auto'
-            )}
-          >
-            셔플
-          </button>
-        </div>
-      </div>
-
+    <div className='flex flex-col mt-4 w-full px-4'>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl'>
           {/* Active Menus Section */}

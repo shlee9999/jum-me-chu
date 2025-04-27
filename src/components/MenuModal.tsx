@@ -46,11 +46,11 @@ export const MenuModal = ({ isOpen, onClose }: MenuModalProps) => {
         )}
       >
         {/* 헤더 */}
-        <div className='flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50'>
-          <div className='flex items-center gap-3'>
+        <div className='flex justify-between items-center p-8 border-b border-gray-100 bg-gray-50/50'>
+          <div className='flex items-center gap-4'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
-              className='h-6 w-6 text-primary-600'
+              className='h-7 w-7 text-primary-600'
               viewBox='0 0 20 20'
               fill='currentColor'
             >
@@ -60,12 +60,12 @@ export const MenuModal = ({ isOpen, onClose }: MenuModalProps) => {
                 clipRule='evenodd'
               />
             </svg>
-            <h2 className='text-xl font-bold text-gray-900'>메뉴 관리</h2>
+            <h2 className='text-2xl font-bold text-gray-900'>메뉴 관리</h2>
           </div>
           <button
             onClick={onClose}
             className={cn(
-              'p-2 rounded-lg text-gray-400 hover:text-gray-600',
+              'p-2.5 rounded-lg text-gray-400 hover:text-gray-600',
               'hover:bg-gray-100 transition-colors duration-200'
             )}
           >
@@ -87,18 +87,50 @@ export const MenuModal = ({ isOpen, onClose }: MenuModalProps) => {
         </div>
 
         {/* 컨텐츠 */}
-        <div className='p-6 space-y-8 overflow-y-auto max-h-[calc(90vh-80px)]'>
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-gray-900'>
-              새 메뉴 추가
-            </h3>
+        <div className='p-8 space-y-10 overflow-y-auto max-h-[calc(90vh-80px)]'>
+          <div className='space-y-6'>
+            <div className='space-y-2'>
+              <h3 className='text-xl font-semibold text-gray-900'>
+                새 메뉴 추가
+              </h3>
+              <p className='text-gray-500 text-sm'>
+                오늘 점심 메뉴로 추가하고 싶은 메뉴를 입력해주세요.
+              </p>
+            </div>
             <AddForm />
           </div>
 
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-gray-900'>메뉴 목록</h3>
-            <div className='border-t border-gray-100 pt-6'>
+          <div className='space-y-6'>
+            <div className='space-y-2'>
+              <h3 className='text-xl font-semibold text-gray-900'>메뉴 목록</h3>
+              <p className='text-gray-500 text-sm'>
+                메뉴를 드래그하여 순서를 변경하거나, 다른 리스트로 이동할 수
+                있습니다.
+              </p>
+            </div>
+            <div className='border-t border-gray-100'>
               <MenuManager />
+            </div>
+            <div className='flex justify-end'>
+              <button
+                onClick={() => {
+                  const isAllowed = confirm(
+                    '모든 리스트가 첫 방문 시로 돌아가며, 복구할 수 없습니다. 정말 초기화하시겠습니까? '
+                  );
+                  if (isAllowed) {
+                    localStorage.clear();
+                    location.reload();
+                  }
+                }}
+                className={cn(
+                  'px-5 py-2.5 bg-gray-700 text-white',
+                  'rounded-lg shadow-md hover:bg-gray-600',
+                  'transition-all transform hover:scale-105 active:scale-95',
+                  'w-full sm:w-auto'
+                )}
+              >
+                초기화
+              </button>
             </div>
           </div>
         </div>
