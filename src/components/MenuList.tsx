@@ -58,7 +58,8 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
         ...provided.draggableProps.style,
       }}
       className={cn(
-        'select-none p-[10px] mb-2 bg-white rounded-[4px] flex justify-between items-center'
+        'select-none p-[10px] mb-2 bg-white rounded-[4px] flex justify-between items-center',
+        'transition-all duration-200 hover:bg-gray-50 hover:scale-[1.02] hover:shadow-md cursor-pointer'
       )}
       onClick={onClickMenu} // Attach onClick handler
     >
@@ -67,7 +68,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
         {/* Edit button */}
         <button
           onClick={handleEdit}
-          className='text-blue-500 hover:text-blue-700'
+          className='text-blue-500 hover:text-blue-700 transition-colors duration-200'
           aria-label='Edit menu'
         >
           ✏️
@@ -76,7 +77,7 @@ export const MenuItem = ({ provided, item, type }: MenuItemProps) => {
         {/* Delete button */}
         <button
           onClick={handleDelete}
-          className='text-red-500 hover:text-red-700'
+          className='text-red-500 hover:text-red-700 transition-colors duration-200'
           aria-label='Delete menu'
         >
           🗑️
@@ -93,7 +94,7 @@ interface MenuProps {
   className: string;
 }
 
-export const Menu = ({
+export const MenuList = ({
   provided,
   menuOptions,
   droppableId,

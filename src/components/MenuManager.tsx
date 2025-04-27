@@ -1,7 +1,7 @@
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useMenuManager } from '../hooks/useMenuManager';
 import { useMenuStore } from '../store/menuStore';
-import { Menu } from './Menu';
+import { MenuList } from './MenuList';
 import { cn } from '../utils/cn';
 
 export const MenuManager = () => {
@@ -37,7 +37,7 @@ export const MenuManager = () => {
             </div>
             <Droppable droppableId='active'>
               {(provided) => (
-                <Menu
+                <MenuList
                   menuOptions={activeMenus}
                   provided={provided}
                   className='bg-primary-50 border border-primary-200 shadow-lg rounded-lg p-6 min-h-[300px]'
@@ -71,7 +71,7 @@ export const MenuManager = () => {
             </div>
             <Droppable droppableId='inactive'>
               {(provided) => (
-                <Menu
+                <MenuList
                   menuOptions={inactiveMenus}
                   provided={provided}
                   className='bg-red-50 border border-red-200 shadow-lg rounded-lg p-6 min-h-[300px]'
