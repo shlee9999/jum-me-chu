@@ -4,7 +4,11 @@ import { backgroundColors } from '../constants/colors';
 import { useMenuStore } from '../store/menuStore';
 import { cn } from '../utils/cn';
 
-export const Roulette = () => {
+interface RouletteProps {
+  onSpinningChange?: (isSpinning: boolean) => void;
+}
+
+export const Roulette = ({ onSpinningChange }: RouletteProps) => {
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [mustSpin, setMustSpin] = useState(false);
   const { activeMenus } = useMenuStore();
@@ -14,11 +18,12 @@ export const Roulette = () => {
       const newPrizeNumber = Math.floor(Math.random() * activeMenus.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
+      onSpinningChange?.(true);
     }
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center'>
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
@@ -36,16 +41,17 @@ export const Roulette = () => {
         }
         backgroundColors={backgroundColors}
         textColors={['#ffffff']}
-        outerBorderColor='#000'
-        outerBorderWidth={10}
-        innerBorderColor='#fff'
-        innerBorderWidth={5}
-        radiusLineColor='#ddd'
-        radiusLineWidth={2}
-        fontSize={18}
+        outerBorderColor='#e2e8f0'
+        outerBorderWidth={8}
+        innerBorderColor='#f8fafc'
+        innerBorderWidth={4}
+        radiusLineColor='#e2e8f0'
+        radiusLineWidth={1}
+        fontSize={16}
         textDistance={60}
         onStopSpinning={() => {
           setMustSpin(false);
+          onSpinningChange?.(false);
           if (activeMenus.length > 0) {
             alert(`오늘 점심은 ${activeMenus[prizeNumber].option}!`);
           }
@@ -56,14 +62,15 @@ export const Roulette = () => {
       <button
         onClick={handleSpinClick}
         className={cn(
-          'mt-5 px-5 py-2.5 text-lg font-bold bg-green-500 text-white border-none',
-          'rounded-md cursor-pointer shadow-md hover:bg-green-600 transition-colors',
-          'disabled:bg-gray-500 disabled:text-gray-400'
+          'mt-6 px-6 py-3 text-lg font-semibold bg-primary-600 text-white',
+          'rounded-lg cursor-pointer shadow-md hover:bg-primary-700 transition-all',
+          'disabled:bg-gray-400 disabled:cursor-not-allowed',
+          'transform hover:scale-105 active:scale-95'
         )}
         disabled={!activeMenus.length || mustSpin}
       >
-        SPIN
+        {mustSpin ? '돌리는 중...' : '룰렛 돌리기'}
       </button>
-    </>
+    </div>
   );
 };

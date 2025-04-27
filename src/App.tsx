@@ -1,29 +1,59 @@
-import { AddForm } from './components/AddForm';
-import { MenuManager } from './components/MenuManager';
+import { MenuModal } from './components/MenuModal';
 import { Roulette } from './components/Roulette';
 import { useInitAnimationFrame } from './hooks/useInitAnimationFrame';
 import { cn } from './utils/cn';
+import { useState } from 'react';
 
 function App() {
   const { enabled } = useInitAnimationFrame();
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   if (!enabled) return null;
 
   return (
-    <>
-      <header>
-        <h1 className='font-sans text-gray-800 text-3xl font-bold mb-6 w-full text-center py-5'>
-          점심 메뉴 룰렛 🎯
-        </h1>
-      </header>
-      <main
-        className={cn('min-h-screen flex flex-col justify-center items-center')}
-      >
-        <Roulette />
-        <AddForm />
-        <MenuManager />
-      </main>
-    </>
+    <div className='bg-background text-foreground flex flex-col justify-center h-screen'>
+      <div className='container mx-auto'>
+        <header className='flex justify-between items-center mb-10 relative'>
+          <div className='w-24'></div>
+          <h1 className='text-3xl font-bold text-primary-600 absolute left-1/2 transform -translate-x-1/2'>
+            점심 메뉴 룰렛 🎯
+          </h1>
+          <button
+            onClick={() => setIsMenuModalOpen(true)}
+            className={cn(
+              'px-4 py-2 bg-primary-600 text-white',
+              'rounded-lg shadow-md hover:bg-primary-700',
+              'transition-all transform hover:scale-105 active:scale-95',
+              'flex items-center gap-2',
+              'disabled:bg-gray-400 disabled:cursor-not-allowed'
+            )}
+            disabled={isSpinning}
+          >
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='h-5 w-5'
+              viewBox='0 0 20 20'
+              fill='currentColor'
+            >
+              <path
+                fillRule='evenodd'
+                d='M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z'
+                clipRule='evenodd'
+              />
+            </svg>
+            메뉴 관리
+          </button>
+        </header>
+        <main className={cn('flex flex-col justify-center items-center')}>
+          <Roulette onSpinningChange={setIsSpinning} />
+        </main>
+      </div>
+      <MenuModal
+        isOpen={isMenuModalOpen}
+        onClose={() => setIsMenuModalOpen(false)}
+      />
+    </div>
   );
 }
 
