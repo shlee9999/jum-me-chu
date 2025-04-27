@@ -18,7 +18,7 @@ function App() {
       <div className='container mx-auto'>
         <header className='flex justify-between items-center mb-10 relative'>
           <div className='w-24'></div>
-          <h1 className='text-3xl font-bold text-primary-600 absolute left-1/2 transform -translate-x-1/2'>
+          <h1 className='text-3xl font-bold text-primary-600 absolute left-1/2 transform -translate-x-1/2 lg:text-4xl'>
             점심 메뉴 룰렛 🎯
           </h1>
           <div className='flex gap-2'>
@@ -49,7 +49,7 @@ function App() {
             <button
               onClick={() => setIsMenuModalOpen(true)}
               className={cn(
-                'px-4 py-2 bg-primary-600 text-white',
+                'p-2 lg:px-4 lg:py-2 bg-primary-600 text-white',
                 'rounded-lg shadow-md hover:bg-primary-700',
                 'transition-all transform hover:scale-105 active:scale-95',
                 'flex items-center gap-2',
@@ -69,7 +69,7 @@ function App() {
                   clipRule='evenodd'
                 />
               </svg>
-              메뉴 관리
+              <span className='hidden lg:block'>메뉴 관리</span>
             </button>
           </div>
         </header>
