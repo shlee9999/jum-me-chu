@@ -27,7 +27,7 @@ export const AddForm = () => {
         onChange={onChange}
         value={inputValue}
         placeholder='새 메뉴 입력'
-        className='p-2 rounded-md border border-gray-300'
+        className='p-2 rounded-md border ring-1 hover:ring-blue-500 transition-shadow duration-200'
       />
       <button
         className={cn(

@@ -1,67 +1,17 @@
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { Menu } from './Menu';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { useMenuManager } from '../hooks/useMenuManager';
 import { useMenuStore } from '../store/menuStore';
+import { Menu } from './Menu';
 
 export const MenuManager = () => {
+  const { onDragEnd } = useMenuManager();
   const {
     activeMenus,
     inactiveMenus,
-    setActiveMenus,
-    setInactiveMenus,
     initActiveMenu,
     initInactiveMenu,
     shuffleActiveMenus,
   } = useMenuStore();
-
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination } = result;
-
-    if (!destination) return;
-
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return;
-
-    if (
-      source.droppableId === 'active' &&
-      destination.droppableId === 'active'
-    ) {
-      const newActiveMenus = Array.from(activeMenus);
-      const [movedItem] = newActiveMenus.splice(source.index, 1);
-      newActiveMenus.splice(destination.index, 0, movedItem);
-      setActiveMenus(newActiveMenus);
-    } else if (
-      source.droppableId === 'inactive' &&
-      destination.droppableId === 'inactive'
-    ) {
-      const newInactiveMenus = Array.from(inactiveMenus);
-      const [movedItem] = newInactiveMenus.splice(source.index, 1);
-      newInactiveMenus.splice(destination.index, 0, movedItem);
-      setInactiveMenus(newInactiveMenus);
-    } else if (
-      source.droppableId === 'active' &&
-      destination.droppableId === 'inactive'
-    ) {
-      const newActiveMenus = Array.from(activeMenus);
-      const newInactiveMenus = Array.from(inactiveMenus);
-      const [movedItem] = newActiveMenus.splice(source.index, 1);
-      newInactiveMenus.splice(destination.index, 0, movedItem);
-      setActiveMenus(newActiveMenus);
-      setInactiveMenus(newInactiveMenus);
-    } else if (
-      source.droppableId === 'inactive' &&
-      destination.droppableId === 'active'
-    ) {
-      const newActiveMenus = Array.from(activeMenus);
-      const newInactiveMenus = Array.from(inactiveMenus);
-      const [movedItem] = newInactiveMenus.splice(source.index, 1);
-      newActiveMenus.splice(destination.index, 0, movedItem);
-      setInactiveMenus(newInactiveMenus);
-      setActiveMenus(newActiveMenus);
-    }
-  };
 
   return (
     <div className='flex flex-col items-center w-full mt-8'>
