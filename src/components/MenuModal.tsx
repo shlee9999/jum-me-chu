@@ -40,9 +40,7 @@ export const MenuModal = ({ isOpen, onClose }: MenuModalProps) => {
     >
       <div
         className={cn(
-          'bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden',
-          'transform transition-all duration-300',
-          isVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+          'bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden'
         )}
       >
         {/* 헤더 */}
